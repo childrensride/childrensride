@@ -9,3 +9,4 @@ childrensride/childrensride is a ✨ special ✨ repository because its `README.
 You can click the Preview link to take a look at your changes.
 --->
 It's person detection code.
+You need loading pip mediapipe -i by qinghuayuan.
