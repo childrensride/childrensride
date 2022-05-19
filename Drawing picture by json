@@ -1,0 +1,87 @@
+import cv2
+import json
+import os
+import string
+json_file = 'E:\\else\\json\\test\\202204251830450\\593dffa1f757231dccf59a1382659fb4.json'
+image = 'E:\\else\\json\\test\\202204251830450\\593dffa1f757231dccf59a1382659fb4.jpg'
+image = cv2.imread(image)
+point_size = 1
+point_color = (0, 0, 255)
+thickness = 4
+line_thickness = 1
+line_color = (0,255,0)
+
+def create_xylist(i):
+    list_1 = [chr(i) for i in range(120, 122)]
+    list_2 = []
+    for a in range(len(load_dict['groups'][i]['keypoints'])):
+        list_2.append(str(load_dict['groups'][i]['keypoints'][a]['label']))
+    list = []
+    for i in range(len(list_1)):
+        x = list_1[i]
+        for a in range(len(list_2)):
+            y = list_2[a]
+            list.append(x + '_' + y)
+    return list
+def create_pointlist():
+    points_list = []
+    for a in range(len(load_dict['groups'][i]['keypoints'])):
+        points_list.append(load_dict['groups'][i]['keypoints'][a]['points'])
+
+    return points_list
+
+def create_xypointdict(i):
+    plist = create_pointlist()
+    xylist = create_xylist(i)
+    xp_list = []
+    yp_list = []
+    for h in range(len(plist)):
+        x = plist[h][0]
+        y = plist[h][1]
+        xp_list.append(x)
+        yp_list.append(y)
+
+    # print(111, yp_list)
+    xp_list.extend(yp_list)
+    p_dict = dict(zip(xylist, xp_list))
+    # print(222,p_dict)
+    return p_dict
+
+def draw_line():
+    cv2.line(image, (int(xy_dict['x_1']), int(xy_dict['y_1'])), (int(xy_dict['x_6']), int(xy_dict['y_6'])), line_color,line_thickness)
+    cv2.line(image, (int(xy_dict['x_6']), int(xy_dict['y_6'])), (int(xy_dict['x_7']), int(xy_dict['y_7'])), line_color,line_thickness)
+    cv2.line(image, (int(xy_dict['x_3']), int(xy_dict['y_3'])), (int(xy_dict['x_5']), int(xy_dict['y_5'])), line_color,line_thickness)
+    cv2.line(image, (int(xy_dict['x_3']), int(xy_dict['y_3'])), (int(xy_dict['x_7']), int(xy_dict['y_7'])), line_color,line_thickness)
+    cv2.line(image, (int(xy_dict['x_2']), int(xy_dict['y_2'])), (int(xy_dict['x_7']), int(xy_dict['y_7'])), line_color,line_thickness)
+    cv2.line(image, (int(xy_dict['x_2']), int(xy_dict['y_2'])), (int(xy_dict['x_4']), int(xy_dict['y_4'])), line_color,line_thickness)
+    cv2.line(image, (int(xy_dict['x_9']), int(xy_dict['y_9'])), (int(xy_dict['x_11']), int(xy_dict['y_11'])), line_color,line_thickness)
+    cv2.line(image, (int(xy_dict['x_11']), int(xy_dict['y_11'])), (int(xy_dict['x_13']), int(xy_dict['y_13'])), line_color,line_thickness)
+    cv2.line(image, (int(xy_dict['x_13']), int(xy_dict['y_13'])), (int(xy_dict['x_15']), int(xy_dict['y_15'])), line_color,line_thickness)
+    cv2.line(image, (int(xy_dict['x_8']), int(xy_dict['y_8'])), (int(xy_dict['x_10']), int(xy_dict['y_10'])), line_color,line_thickness)
+    cv2.line(image, (int(xy_dict['x_10']), int(xy_dict['y_10'])), (int(xy_dict['x_12']), int(xy_dict['y_12'])), line_color,line_thickness)
+    cv2.line(image, (int(xy_dict['x_12']), int(xy_dict['y_12'])), (int(xy_dict['x_14']), int(xy_dict['y_14'])), line_color,line_thickness)
+    cv2.line(image, (int(xy_dict['x_17']), int(xy_dict['y_17'])), (int(xy_dict['x_19']), int(xy_dict['y_19'])), line_color,line_thickness)
+    cv2.line(image, (int(xy_dict['x_19']), int(xy_dict['y_19'])), (int(xy_dict['x_21']), int(xy_dict['y_21'])), line_color,line_thickness)
+    cv2.line(image, (int(xy_dict['x_21']), int(xy_dict['y_21'])), (int(xy_dict['x_24']), int(xy_dict['y_24'])), line_color,line_thickness)
+    cv2.line(image, (int(xy_dict['x_21']), int(xy_dict['y_21'])), (int(xy_dict['x_25']), int(xy_dict['y_25'])), line_color,line_thickness)
+    cv2.line(image, (int(xy_dict['x_16']), int(xy_dict['y_16'])), (int(xy_dict['x_18']), int(xy_dict['y_18'])), line_color,line_thickness)
+    cv2.line(image, (int(xy_dict['x_18']), int(xy_dict['y_18'])), (int(xy_dict['x_20']), int(xy_dict['y_20'])), line_color,line_thickness)
+    cv2.line(image, (int(xy_dict['x_20']), int(xy_dict['y_20'])), (int(xy_dict['x_22']), int(xy_dict['y_22'])), line_color,line_thickness)
+    cv2.line(image, (int(xy_dict['x_20']), int(xy_dict['y_20'])), (int(xy_dict['x_23']), int(xy_dict['y_23'])), line_color,line_thickness)
+with open(json_file,'r') as load_f:
+    load_dict = json.load(load_f)
+    # print("y_14=",load_dict['groups'][-1]['keypoints'][14]['points'][-1])
+    for i in range(load_dict['groups'][-1]['group_id']):
+        keypoints = load_dict['groups'][i]['keypoints']
+        if len(keypoints) ==0:
+            i += 1
+        elif len(keypoints) !=0:
+            xy_point = create_pointlist()
+            xy_dict = create_xypointdict(i)
+            for j in range(len(xy_point)):
+                cv2.circle(image, (int(xy_point[j][0]), int(xy_point[j][1])), point_size, point_color, thickness)
+            draw_line()
+cv2.imshow('img',image)
+cv2.waitKey(0)
+cv2.destroyAllWindows()
+
